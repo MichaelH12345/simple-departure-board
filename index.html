@@ -50,16 +50,7 @@
             position: relative;
         }
 
-        .footer {
-            background-color: #101010; /* Black */
-            height: 100px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+
 
         .footer-text {
             font-family: 'P22UndergroundDemiBold', sans-serif;
@@ -67,7 +58,7 @@
             color: #f8e714;
             position: absolute;
             left: 25px; /* Position 20px from the left */
-            bottom: 20px; /* Position text within the footer */
+            bottom: 12.5px; /* Position text within the footer */
         }
 
         .line {
@@ -77,12 +68,13 @@
             position: relative;
         }
 
-        .section {
-            height: calc(100% / 9); /* Dividing remaining space into 7 sections */
-            position: relative;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out; /* Added fade transition */
-        }
+.section {
+    height: calc(100% / 9);
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
 
         .departure-text {
             position: absolute;
@@ -91,7 +83,7 @@
             transform: translateY(-50%);
             color: white;
             font-family: 'P22UndergroundDemiBold', sans-serif;
-            font-size: 90px;
+            font-size: 85px;
         }
 
         .time-box {
@@ -157,7 +149,7 @@
 
 .footer {
     background-color: #101010;
-    height: 100px;
+    height: 85px;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -180,8 +172,6 @@
     background-color: grey;
     border-radius: 50%;
 }
-
-
     </style>
 </head>
 <body>
@@ -190,63 +180,60 @@
         <div class="departure-text">Departures</div>
         <div class="time-box" id="time"></div>
     </div>
-
+            <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-1"></div>
         <div class="destination-text" id="destination-1"></div>
         <div class="platform-text" id="platform-1"></div>
         <div class="estimated-time-box" id="estimated-time-1"></div>
-        <div class="line"></div> <!-- Static line -->
     </div>
+            <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-2"></div>
         <div class="destination-text" id="destination-2"></div>
         <div class="platform-text" id="platform-2"></div>
         <div class="estimated-time-box" id="estimated-time-2"></div>
-        <div class="line"></div> <!-- Static line -->
     </div>
+            <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-3"></div>
         <div class="destination-text" id="destination-3"></div>
         <div class="platform-text" id="platform-3"></div>
         <div class="estimated-time-box" id="estimated-time-3"></div>
-        <div class="line"></div> <!-- Static line -->
     </div>
+            <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-4"></div>
         <div class="destination-text" id="destination-4"></div>
         <div class="platform-text" id="platform-4"></div>
         <div class="estimated-time-box" id="estimated-time-4"></div>
-        <div class="line"></div> <!-- Static line -->
     </div>
+            <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-5"></div>
         <div class="destination-text" id="destination-5"></div>
         <div class="platform-text" id="platform-5"></div>
         <div class="estimated-time-box" id="estimated-time-5"></div>
-        <div class="line"></div> <!-- Static line -->
     </div>
+            <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-6"></div>
         <div class="destination-text" id="destination-6"></div>
         <div class="platform-text" id="platform-6"></div>
         <div class="estimated-time-box" id="estimated-time-6"></div>
-        <div class="line"></div> <!-- Static line -->
     </div>
+            <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-7"></div>
         <div class="destination-text" id="destination-7"></div>
         <div class="platform-text" id="platform-7"></div>
         <div class="estimated-time-box" id="estimated-time-7"></div>
-        <div class="line"></div> <!-- Static line -->
     </div>
-
 <div class="rectangle footer">
     <div class="footer-text" id="footer-text">Page 1 of 2</div>
     <div class="circles">
         <div class="circle"></div>
         <div class="circle"></div>
-    </div>
 </div>
 
 
@@ -283,75 +270,75 @@
         }
     }
 
-    function updatePage(page, totalItems) {
-        const mapping = pageMappings[page];
-        if (!mapping) return;
 
-        // Fade out current sections
-        const sections = document.querySelectorAll('.section');
-        sections.forEach(section => {
-            section.style.opacity = 0;
-        });
+function updatePage(page, totalItems) {
+    const mapping = pageMappings[page];
+    if (!mapping) return;
 
-        // Wait for fade-out transition to complete, then update page
-        setTimeout(() => {
-            // Clear existing content
-            for (let i = 1; i <= 7; i++) {
-                document.getElementById(`scheduled-time-${i}`).textContent = '';
-                document.getElementById(`destination-${i}`).textContent = '';
-                document.getElementById(`platform-${i}`).textContent = '';
-                document.getElementById(`estimated-time-${i}`).textContent = '';
+    const sections = document.querySelectorAll('.section');
+    const footerText = document.getElementById('footer-text');
+    const circles = document.querySelectorAll('.circle');
+
+    // Step 1: Fade out all sections simultaneously
+    sections.forEach(section => {
+        section.style.opacity = 0;
+        section.style.transitionDelay = '0s'; // Reset delay for fade-out
+    });
+
+    // Step 2: Wait for fade-out transition to complete (1 second)
+    setTimeout(() => {
+        // Clear existing content
+        for (let i = 1; i <= 7; i++) {
+            document.getElementById(`scheduled-time-${i}`).textContent = '';
+            document.getElementById(`destination-${i}`).textContent = '';
+            document.getElementById(`platform-${i}`).textContent = '';
+            document.getElementById(`estimated-time-${i}`).textContent = '';
+        }
+
+        // Fetch and update content for the current page
+        fetchDepartures().then(data => {
+            if (data.Items) {
+                const departuresToDisplay = totalItems > 7
+                    ? data.Items.slice(mapping.start - 1, mapping.end)
+                    : data.Items.slice(0, 7);
+
+                departuresToDisplay.forEach((departure, index) => {
+                    document.getElementById(`scheduled-time-${index + 1}`).textContent = departure.ScheduledTime || '';
+                    document.getElementById(`destination-${index + 1}`).textContent = departure.Destination.Name || '';
+                    document.getElementById(`platform-${index + 1}`).textContent = departure.Platform ? `Plat ${departure.Platform}` : '';
+                    const estimatedTimeTextElement = document.getElementById(`estimated-time-${index + 1}`);
+                    if (estimatedTimeTextElement) {
+                        const estimatedTime = departure.EstimatedTime;
+
+                        // Apply color and text based on estimated time
+                        if (estimatedTime === 'On time') {
+                            estimatedTimeTextElement.style.backgroundColor = 'white';
+                            estimatedTimeTextElement.style.color = 'black';
+                            estimatedTimeTextElement.textContent = estimatedTime;
+                        } else if (estimatedTime === 'Cancelled') {
+                            estimatedTimeTextElement.style.backgroundColor = '#ef2758';
+                            estimatedTimeTextElement.style.color = 'white';
+                            estimatedTimeTextElement.textContent = estimatedTime;
+                        } else if (estimatedTime === 'Departed') {
+                            estimatedTimeTextElement.style.backgroundColor = '#f8e714';
+                            estimatedTimeTextElement.style.color = 'black';
+                            estimatedTimeTextElement.textContent = estimatedTime;
+                        } else if (estimatedTime === 'Delayed') {
+                            estimatedTimeTextElement.style.backgroundColor = '#ec6822';
+                            estimatedTimeTextElement.style.color = 'black';
+                            estimatedTimeTextElement.textContent = estimatedTime;
+                        } else {
+                            estimatedTimeTextElement.style.backgroundColor = '#ec6822';
+                            estimatedTimeTextElement.style.color = 'black';
+                            estimatedTimeTextElement.textContent = `Exp ${estimatedTime}`;
+                        }
+                    }
+                });
+            } else {
+                console.log('No departures found.');
             }
 
-            // Fetch and update content for the current page
-            fetchDepartures().then(data => {
-                if (data.Items) {
-                    const departuresToDisplay = totalItems > 7
-                        ? data.Items.slice(mapping.start - 1, mapping.end)
-                        : data.Items.slice(0, 7);
-
-                    departuresToDisplay.forEach((departure, index) => {
-                        document.getElementById(`scheduled-time-${index + 1}`).textContent = departure.ScheduledTime || '';
-                        document.getElementById(`destination-${index + 1}`).textContent = departure.Destination.Name || '';
-                        document.getElementById(`platform-${index + 1}`).textContent = departure.Platform ? `Plat ${departure.Platform}` : '';
-                        const estimatedTimeTextElement = document.getElementById(`estimated-time-${index + 1}`);
-                        if (estimatedTimeTextElement) {
-                            const estimatedTime = departure.EstimatedTime;
-
-                            // Apply color and text based on estimated time
-                            if (estimatedTime === 'On time') {
-                                estimatedTimeTextElement.style.backgroundColor = 'white';
-                                estimatedTimeTextElement.style.color = 'black';
-                                estimatedTimeTextElement.textContent = estimatedTime;
-                            } else if (estimatedTime === 'Cancelled') {
-                                estimatedTimeTextElement.style.backgroundColor = '#ef2758';
-                                estimatedTimeTextElement.style.color = 'white';
-                                estimatedTimeTextElement.textContent = estimatedTime;
-                            } else if (estimatedTime === 'Departed') {
-                                estimatedTimeTextElement.style.backgroundColor = '#f8e714';
-                                estimatedTimeTextElement.style.color = 'black';
-                                estimatedTimeTextElement.textContent = estimatedTime;
-                            } else if (estimatedTime === 'Delayed') {
-                                estimatedTimeTextElement.style.backgroundColor = '#ec6822';
-                                estimatedTimeTextElement.style.color = 'black';
-                                estimatedTimeTextElement.textContent = estimatedTime;
-                            } else {
-                                estimatedTimeTextElement.style.backgroundColor = '#ec6822';
-                                estimatedTimeTextElement.style.color = 'black';
-                                estimatedTimeTextElement.textContent = `Exp ${estimatedTime}`;
-                            }
-                        }
-                    });
-                } else {
-                    console.log('No departures found.');
-                }
-            }).catch(error => {
-                console.error('Error fetching departures:', error);
-            });
-
             // Update footer and circles based on the number of items
-            const footerText = document.getElementById('footer-text');
-            const circles = document.querySelectorAll('.circle');
             if (totalItems <= 7) {
                 footerText.textContent = 'Page 1 of 1'; // Single page
                 circles.forEach(circle => {
@@ -373,12 +360,19 @@
                 }
             }
 
-            // Fade in updated sections
-            sections.forEach(section => {
+        }).catch(error => {
+            console.error('Error fetching departures:', error);
+        });
+
+        // Step 3: Fade in sections with a staggered delay
+        sections.forEach((section, index) => {
+            setTimeout(() => {
                 section.style.opacity = 1;
-            });
-        }, 1000); // Match the fade-out duration
-    }
+                section.style.transitionDelay = `${index * 0.25}s`; // 0.5s gap between sections
+            }, 500); // Start fade-in animation after content has loaded
+        });
+    }, 500); // Wait 1 second after fade-out before loading content
+}
 
     // Initialize the first page and determine behavior based on item count
     fetchDepartures().then(data => {
