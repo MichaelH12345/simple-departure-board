@@ -12,11 +12,11 @@
         }
         @font-face {
             font-family: 'P22UndergroundDemiBold';
-            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20DemiBold.ttf') format('truetype');
+            src: url('https://raw.githubusercontent.com/MichaelH12345/simple-departure-board/main/Open%20Sans%20Semibold.ttf') format('truetype');
         }
         @font-face {
             font-family: 'P22UndergroundHeavy';
-            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20Heavy.ttf') format('truetype');
+            src: url('https://raw.githubusercontent.com/MichaelH12345/simple-departure-board/main/Open%20Sans%20Bold.ttf') format('truetype');
         }
         @font-face {
             font-family: 'P22UndergroundLight';
@@ -66,7 +66,7 @@
             font-size: 50px;
             color: #f8e714;
             position: absolute;
-            left: 40px; /* Position 20px from the left */
+            left: 25px; /* Position 20px from the left */
             bottom: 20px; /* Position text within the footer */
         }
 
@@ -86,8 +86,8 @@
 
         .departure-text {
             position: absolute;
-            top: 52.5%;
-            left: 40px;
+            top: 45%;
+            left: 25px;
             transform: translateY(-50%);
             color: white;
             font-family: 'P22UndergroundDemiBold', sans-serif;
@@ -96,19 +96,19 @@
 
         .time-box {
             position: absolute;
-            top: 55%;
-            left: 1605px;
+            top: 50%;
+            right: 25px;
             transform: translateY(-50%);
             color: #f8e714;
-            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-family: 'P22UndergroundHeavy', sans-serif;
             font-size: 75px;
         }
 
         /* Added scheduled text box to each section */
         .scheduled-text {
             position: absolute;
-            right: 1720px;
-            top: 55%;
+            left: 25px;
+            top: 50%;
             transform: translateY(-50%);
             font-family: 'P22UndergroundDemiBold', sans-serif;
             font-size: 75px;
@@ -118,8 +118,8 @@
         /* Added destination text box to each section */
         .destination-text {
             position: absolute;
-            left: 225px;
-            top: 55%;
+            left: 240px;
+            top: 50%;
             transform: translateY(-50%);
             font-family: 'P22UndergroundDemiBold', sans-serif;
             font-size: 75px;
@@ -129,8 +129,8 @@
         /* Added platform text box to each section */
         .platform-text {
             position: absolute;
-            left: 1250px;
-            top: 55%;
+            right: 425px;
+            top: 50%;
             transform: translateY(-50%);
             font-family: 'P22UndergroundDemiBold', sans-serif;
             font-size: 75px;
@@ -147,7 +147,7 @@
             height: 80px;
             background-color: black;
             border-radius: 5px;
-            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-family: 'P22UndergroundHeavy', sans-serif;
             font-size: 50px;
             color: black;
             display: flex;
@@ -171,12 +171,12 @@
     gap: 25px; /* 10px gap between circles */
     margin-left: auto; /* Pushes the circles to the right */
     position: relative;
-    right: 40px; /* 20px from the right edge of the page */
+    right: 20px; /* 20px from the right edge of the page */
 }
 
 .circle {
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
     background-color: grey;
     border-radius: 50%;
 }
