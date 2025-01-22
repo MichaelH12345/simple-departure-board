@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Departure Board</title>
+    <style>
+        /* Font Imports */
+        @font-face {
+            font-family: 'P22Underground';
+            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20Book.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'P22UndergroundDemiBold';
+            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20DemiBold.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'P22UndergroundHeavy';
+            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20Heavy.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'P22UndergroundLight';
+            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20Light.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'P22UndergroundMedium';
+            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20Medium.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'P22UndergroundThin';
+            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20Thin.ttf') format('truetype');
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: black;
+        }
+
+        .rectangle {
+            width: 100%;
+            height: 100px;
+        }
+
+        .top {
+            background-color: #101010; /* Dark grey */
+            height: 140px;
+            position: relative;
+        }
+
+        .footer {
+            background-color: #101010; /* Black */
+            height: 100px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-size: 50px;
+            color: #f8e714;
+            position: absolute;
+            left: 40px; /* Position 20px from the left */
+            bottom: 20px; /* Position text within the footer */
+        }
+
+        .line {
+            width: 100%;
+            height: 2px;
+            background-color: #424242;
+            position: relative;
+        }
+
+        .section {
+            height: calc(100% / 9); /* Dividing remaining space into 7 sections */
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out; /* Added fade transition */
+        }
+
+        .departure-text {
+            position: absolute;
+            top: 52.5%;
+            left: 40px;
+            transform: translateY(-50%);
+            color: white;
+            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-size: 90px;
+        }
+
+        .time-box {
+            position: absolute;
+            top: 55%;
+            left: 1605px;
+            transform: translateY(-50%);
+            color: #f8e714;
+            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-size: 75px;
+        }
+
+        /* Added scheduled text box to each section */
+        .scheduled-text {
+            position: absolute;
+            right: 1720px;
+            top: 55%;
+            transform: translateY(-50%);
+            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-size: 75px;
+            color: #f8e714;
+        }
+
+        /* Added destination text box to each section */
+        .destination-text {
+            position: absolute;
+            left: 225px;
+            top: 55%;
+            transform: translateY(-50%);
+            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-size: 75px;
+            color: white;
+        }
+
+        /* Added platform text box to each section */
+        .platform-text {
+            position: absolute;
+            left: 1250px;
+            top: 55%;
+            transform: translateY(-50%);
+            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-size: 75px;
+            color: #f8e714;
+        }
+
+        /* Added estimated time box */
+        .estimated-time-box {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 350px;
+            height: 80px;
+            background-color: black;
+            border-radius: 5px;
+            font-family: 'P22UndergroundDemiBold', sans-serif;
+            font-size: 50px;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+.footer {
+    background-color: #101010;
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.circles {
+    display: flex;
+    gap: 25px; /* 10px gap between circles */
+    margin-left: auto; /* Pushes the circles to the right */
+    position: relative;
+    right: 40px; /* 20px from the right edge of the page */
+}
+
+.circle {
+    width: 45px;
+    height: 45px;
+    background-color: grey;
+    border-radius: 50%;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div class="rectangle top"> <!-- Dark grey rectangle at the top -->
+        <div class="departure-text">Departures</div>
+        <div class="time-box" id="time"></div>
+    </div>
+
+    <div class="section">
+        <div class="scheduled-text" id="scheduled-time-1"></div>
+        <div class="destination-text" id="destination-1"></div>
+        <div class="platform-text" id="platform-1"></div>
+        <div class="estimated-time-box" id="estimated-time-1"></div>
+        <div class="line"></div> <!-- Static line -->
+    </div>
+    <div class="section">
+        <div class="scheduled-text" id="scheduled-time-2"></div>
+        <div class="destination-text" id="destination-2"></div>
+        <div class="platform-text" id="platform-2"></div>
+        <div class="estimated-time-box" id="estimated-time-2"></div>
+        <div class="line"></div> <!-- Static line -->
+    </div>
+    <div class="section">
+        <div class="scheduled-text" id="scheduled-time-3"></div>
+        <div class="destination-text" id="destination-3"></div>
+        <div class="platform-text" id="platform-3"></div>
+        <div class="estimated-time-box" id="estimated-time-3"></div>
+        <div class="line"></div> <!-- Static line -->
+    </div>
+    <div class="section">
+        <div class="scheduled-text" id="scheduled-time-4"></div>
+        <div class="destination-text" id="destination-4"></div>
+        <div class="platform-text" id="platform-4"></div>
+        <div class="estimated-time-box" id="estimated-time-4"></div>
+        <div class="line"></div> <!-- Static line -->
+    </div>
+    <div class="section">
+        <div class="scheduled-text" id="scheduled-time-5"></div>
+        <div class="destination-text" id="destination-5"></div>
+        <div class="platform-text" id="platform-5"></div>
+        <div class="estimated-time-box" id="estimated-time-5"></div>
+        <div class="line"></div> <!-- Static line -->
+    </div>
+    <div class="section">
+        <div class="scheduled-text" id="scheduled-time-6"></div>
+        <div class="destination-text" id="destination-6"></div>
+        <div class="platform-text" id="platform-6"></div>
+        <div class="estimated-time-box" id="estimated-time-6"></div>
+        <div class="line"></div> <!-- Static line -->
+    </div>
+    <div class="section">
+        <div class="scheduled-text" id="scheduled-time-7"></div>
+        <div class="destination-text" id="destination-7"></div>
+        <div class="platform-text" id="platform-7"></div>
+        <div class="estimated-time-box" id="estimated-time-7"></div>
+        <div class="line"></div> <!-- Static line -->
+    </div>
+
+<div class="rectangle footer">
+    <div class="footer-text" id="footer-text">Page 1 of 2</div>
+    <div class="circles">
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+</div>
+
+
+<script>
+    const pageMappings = {
+        page1: { start: 1, end: 7 }, // First 7 services
+        page2: { start: 8, end: 14 } // Next 7 services
+    };
+
+    let currentPage = 'page1'; // Start with page1
+    let stationCode = prompt("Please enter a CRS (station code):", "CAR"); // Ask user for CRS code
+    if (!stationCode) {
+        stationCode = "CAR"; // Default to CAR if no input is given
+    }
+
+    async function fetchDepartures() {
+        try {
+            const apiUrl = `https://railinfo-api.gwr.com/journey/departures/${stationCode}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            // Update "departure-text" with the station name
+            if (data.Station && data.Station.Name) {
+                const departureTextElement = document.querySelector('.departure-text');
+                if (departureTextElement) {
+                    departureTextElement.textContent = `${data.Station.Name} Departures`;
+                }
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Error fetching departures:', error);
+            return { Items: [] }; // Return an empty list on error
+        }
+    }
+
+    function updatePage(page, totalItems) {
+        const mapping = pageMappings[page];
+        if (!mapping) return;
+
+        // Fade out current sections
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(section => {
+            section.style.opacity = 0;
+        });
+
+        // Wait for fade-out transition to complete, then update page
+        setTimeout(() => {
+            // Clear existing content
+            for (let i = 1; i <= 7; i++) {
+                document.getElementById(`scheduled-time-${i}`).textContent = '';
+                document.getElementById(`destination-${i}`).textContent = '';
+                document.getElementById(`platform-${i}`).textContent = '';
+                document.getElementById(`estimated-time-${i}`).textContent = '';
+            }
+
+            // Fetch and update content for the current page
+            fetchDepartures().then(data => {
+                if (data.Items) {
+                    const departuresToDisplay = totalItems > 7
+                        ? data.Items.slice(mapping.start - 1, mapping.end)
+                        : data.Items.slice(0, 7);
+
+                    departuresToDisplay.forEach((departure, index) => {
+                        document.getElementById(`scheduled-time-${index + 1}`).textContent = departure.ScheduledTime || '';
+                        document.getElementById(`destination-${index + 1}`).textContent = departure.Destination.Name || '';
+                        document.getElementById(`platform-${index + 1}`).textContent = departure.Platform ? `Plat ${departure.Platform}` : '';
+                        const estimatedTimeTextElement = document.getElementById(`estimated-time-${index + 1}`);
+                        if (estimatedTimeTextElement) {
+                            const estimatedTime = departure.EstimatedTime;
+
+                            // Apply color and text based on estimated time
+                            if (estimatedTime === 'On time') {
+                                estimatedTimeTextElement.style.backgroundColor = 'lightgrey';
+                                estimatedTimeTextElement.style.color = 'black';
+                                estimatedTimeTextElement.textContent = estimatedTime;
+                            } else if (estimatedTime === 'Cancelled') {
+                                estimatedTimeTextElement.style.backgroundColor = '#ef2758';
+                                estimatedTimeTextElement.style.color = 'white';
+                                estimatedTimeTextElement.textContent = estimatedTime;
+                            } else if (estimatedTime === 'Departed') {
+                                estimatedTimeTextElement.style.backgroundColor = '#f8e714';
+                                estimatedTimeTextElement.style.color = 'black';
+                                estimatedTimeTextElement.textContent = estimatedTime;
+                            } else if (estimatedTime === 'Delayed') {
+                                estimatedTimeTextElement.style.backgroundColor = '#ec6822';
+                                estimatedTimeTextElement.style.color = 'black';
+                                estimatedTimeTextElement.textContent = estimatedTime;
+                            } else {
+                                estimatedTimeTextElement.style.backgroundColor = '#ec6822';
+                                estimatedTimeTextElement.style.color = 'black';
+                                estimatedTimeTextElement.textContent = `Exp ${estimatedTime}`;
+                            }
+                        }
+                    });
+                } else {
+                    console.log('No departures found.');
+                }
+            }).catch(error => {
+                console.error('Error fetching departures:', error);
+            });
+
+            // Update footer and circles based on the number of items
+            const footerText = document.getElementById('footer-text');
+            const circles = document.querySelectorAll('.circle');
+            if (totalItems <= 7) {
+                footerText.textContent = 'Page 1 of 1'; // Single page
+                circles.forEach(circle => {
+                    circle.style.display = 'none'; // Hide circles
+                });
+            } else {
+                footerText.textContent = `Page ${currentPage === 'page1' ? 1 : 2} of 2`; // Show current page
+                circles.forEach(circle => {
+                    circle.style.display = 'block'; // Show circles
+                });
+
+                // Update circle colors
+                if (currentPage === 'page1') {
+                    circles[0].style.backgroundColor = 'yellow';
+                    circles[1].style.backgroundColor = 'grey';
+                } else {
+                    circles[0].style.backgroundColor = 'grey';
+                    circles[1].style.backgroundColor = 'yellow';
+                }
+            }
+
+            // Fade in updated sections
+            sections.forEach(section => {
+                section.style.opacity = 1;
+            });
+        }, 1000); // Match the fade-out duration
+    }
+
+    // Initialize the first page and determine behavior based on item count
+    fetchDepartures().then(data => {
+        const totalItems = data.Items.length;
+
+        if (totalItems <= 7) {
+            currentPage = 'page1'; // Always stay on page 1 for <= 7 items
+            updatePage(currentPage, totalItems);
+        } else {
+            // Automatically switch pages every 7 seconds
+            setInterval(() => {
+                currentPage = currentPage === 'page1' ? 'page2' : 'page1';
+                updatePage(currentPage, totalItems);
+            }, 7000);
+
+            updatePage(currentPage, totalItems); // Initial update
+        }
+    });
+
+    // Update the current time every second
+    function updateTime() {
+        const timeElement = document.getElementById('time');
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateTime, 1000);
+    updateTime();
+</script>
+
+
+
+</body>
+</html>
