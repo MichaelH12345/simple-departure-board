@@ -515,7 +515,7 @@ function updatePage(page, totalItems) {
                     setTimeout(() => {
                         section.style.opacity = 1;
                         section.style.transitionDelay = `${index * 0.25}s`; // 0.25s gap between sections
-                    }, 250); // Start fade-in animation after content has loaded
+                    }, 50); // Start fade-in animation after content has loaded
                 }
             });
 
@@ -533,11 +533,11 @@ function updatePage(page, totalItems) {
                     box.style.opacity = 1; // Set opacity for the slide-in animation
                 });
                 slideInEstimatedTimeBoxes(); // Trigger the slide-in animation for all estimated time boxes
-            }, 2500); // Adjust this delay to match the fade-in timing of the sections
+            }, 2250); // Adjust this delay to match the fade-in timing of the sections
         }).catch(error => {
             console.error('Error fetching departures:', error);
         });
-    }, 1000); // Wait 1 second after fade-out before loading content
+    }, 500); // Wait 1 second after fade-out before loading content
 }
 
 // Initialize the first page and determine behavior based on item count
