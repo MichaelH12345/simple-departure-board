@@ -37,6 +37,7 @@
             height: 100%;
             width: 100%;
             background-color: black;
+            overflow: hidden;
         }
 
         .rectangle {
@@ -129,23 +130,41 @@
             color: #f8e714;
         }
 
-        /* Added estimated time box */
-        .estimated-time-box {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 350px;
-            height: 80px;
-            background-color: black;
-            border-radius: 5px;
-            font-family: 'P22UndergroundHeavy', sans-serif;
-            font-size: 50px;
-            color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+/* Estimated time box (hidden initially, will slide in from right) */
+.estimated-time-box {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 355px;
+    height: 80px;
+    background-color: black;
+    border-radius: 7.5px; /* Apply border-radius to top-left and bottom-left only */
+    font-family: 'P22UndergroundHeavy', sans-serif;
+    font-size: 50px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Initially hidden */
+ transition: right 3s ease-in-out; /* Apply ease-out to opacity and sliding */
+}
+
+/* Spring animation for sliding in from right */
+@keyframes slideIn {
+    0% {
+        right: -355px; /* Start off-screen */
+    }
+    100% {
+        right: 15px; /* Final position */
+    }
+}
+
+/* Trigger class for the slide-in effect */
+.estimated-time-box.show {
+    animation: slideIn 0.25s ease-out forwards; /* Slide-in from the right */
+    opacity: 1; /* Fade-in */
+}
 
 .footer {
     background-color: #101010;
@@ -238,39 +257,152 @@
 
 
 <script>
-    const pageMappings = {
-        page1: { start: 1, end: 7 }, // First 7 services
-        page2: { start: 8, end: 14 } // Next 7 services
-    };
+const pageMappings = {
+    page1: { start: 1, end: 7 }, // First 7 services
+    page2: { start: 8, end: 14 } // Next 7 services
+};
 
-    let currentPage = 'page1'; // Start with page1
-    let stationCode = prompt("Please enter a CRS (station code):", "CAR"); // Ask user for CRS code
-    if (!stationCode) {
-        stationCode = "CAR"; // Default to CAR if no input is given
-    }
+let currentPage = 'page1'; // Start with page1
+let stationCode = prompt("Please enter a CRS (station code):", "CAR"); // Ask user for CRS code
+if (!stationCode) {
+    stationCode = "CAR"; // Default to CAR if no input is given
+}
 
-    async function fetchDepartures() {
-        try {
-            const apiUrl = `https://railinfo-api.gwr.com/journey/departures/${stationCode}`;
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+async function fetchDepartures() {
+    try {
+        const apiUrl = `https://railinfo-api.gwr.com/journey/departures/${stationCode}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-            // Update "departure-text" with the station name
-            if (data.Station && data.Station.Name) {
-                const departureTextElement = document.querySelector('.departure-text');
-                if (departureTextElement) {
-                    departureTextElement.textContent = `${data.Station.Name} Departures`;
-                }
+        // Update "departure-text" with the station name
+        if (data.Station && data.Station.Name) {
+            const departureTextElement = document.querySelector('.departure-text');
+            if (departureTextElement) {
+                departureTextElement.textContent = `${data.Station.Name} Departures`;
             }
-
-            return data;
-        } catch (error) {
-            console.error('Error fetching departures:', error);
-            return { Items: [] }; // Return an empty list on error
         }
+
+        // Check if there are departures (Items)
+        if (!data.Items || data.Items.length === 0) {
+            // If no items, create and display a "No services" message
+            const noServicesText = document.createElement('div');
+            noServicesText.textContent = 'Please listen for announcements or call National Rail Enquiries on 03457 48 49 50 ';
+            noServicesText.style.position = 'absolute';
+            noServicesText.style.top = '175px'; // Position 100px from the top
+            noServicesText.style.left = '50%'; // Center horizontally
+            noServicesText.style.transform = 'translateX(-50%)'; // Adjust for exact centering
+            noServicesText.style.fontSize = '70px';
+            noServicesText.style.textAlign = 'center';
+            noServicesText.style.fontFamily = "'P22UndergroundDemiBold', sans-serif"; // Apply the font
+            noServicesText.style.color = 'white'; // Set the text color to white
+            document.body.appendChild(noServicesText);
+        } else {
+            // Handle the data.Items if there are departures
+            console.log(data.Items); // For example, log the departures to the console
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching departures:', error);
+        return { Items: [] }; // Return an empty list on error
+    }
+}
+
+
+
+function updateEstimatedTimeBox(estimatedTime, estimatedTimeEl) {
+    // Debug: Log the function call
+    console.log('Updating Estimated Time Box:', estimatedTime);
+
+    let boxColor;
+    let sideIndicatorColor;
+
+    // Apply color and text based on estimated time
+    if (estimatedTime === 'On time') {
+        boxColor = 'white';
+        estimatedTimeEl.style.color = 'black';
+        estimatedTimeEl.textContent = estimatedTime;
+        sideIndicatorColor = boxColor; // Same color for side indicator
+    } else if (estimatedTime === 'Cancelled') {
+        boxColor = '#ef2758'; // Red for "Cancelled"
+        estimatedTimeEl.style.color = 'white';
+        estimatedTimeEl.textContent = estimatedTime;
+        sideIndicatorColor = boxColor; // Same color for side indicator
+    } else if (estimatedTime === 'Departed') {
+        boxColor = '#f8e714'; // Yellow for "Departed"
+        estimatedTimeEl.style.color = 'black';
+        estimatedTimeEl.textContent = estimatedTime;
+        sideIndicatorColor = boxColor; // Same color for side indicator
+    } else if (estimatedTime === 'Delayed') {
+        boxColor = '#ec6822'; // Orange for "Delayed"
+        estimatedTimeEl.style.color = 'black';
+        estimatedTimeEl.textContent = estimatedTime;
+        sideIndicatorColor = boxColor; // Same color for side indicator
+    } else {
+        boxColor = '#ec6822'; // Default for "Exp" (Expected)
+        estimatedTimeEl.style.color = 'black';
+        estimatedTimeEl.textContent = `Exp ${estimatedTime}`;
+        sideIndicatorColor = boxColor; // Same color for side indicator
     }
 
+    // Apply the box color to the estimated time box
+    estimatedTimeEl.style.backgroundColor = boxColor;
 
+    // Apply the same color to the side indicator
+    const sideIndicator = estimatedTimeEl.querySelector('.side-indicator');
+    if (sideIndicator) {
+        sideIndicator.style.backgroundColor = sideIndicatorColor; // Same color for side indicator
+    }
+
+    // Debug: Log applied colors
+    console.log('Box background color:', boxColor);
+    console.log('Side indicator color:', sideIndicatorColor);
+
+    // Optionally, trigger any animations if needed
+    window.addEventListener('load', () => {
+        estimatedTimeEl.classList.add('show'); // Trigger a CSS animation (if desired)
+    });
+}
+
+
+
+
+
+
+// Function to trigger the slide-in animation for all estimated time boxes
+function slideInEstimatedTimeBoxes() {
+    const estimatedTimeBoxes = document.querySelectorAll('.estimated-time-box');
+    estimatedTimeBoxes.forEach((box) => {
+        box.classList.remove('show'); // Reset the animation by removing the class
+    });
+
+    // Trigger reflow by forcing a layout calculation
+    setTimeout(() => {
+        estimatedTimeBoxes.forEach((box) => {
+            void box.offsetWidth; // Force reflow (necessary for animation reset)
+            box.classList.add('show'); // Add the class back to start the slide-in animation
+        });
+    }, 00); // Delay to allow time for the fade-in of sections
+}
+
+// Function to set estimated time box opacity to 1 for 3 seconds
+function setTemporaryOpacity() {
+    const estimatedTimeBoxes = document.querySelectorAll('.estimated-time-box');
+    estimatedTimeBoxes.forEach((box) => {
+        box.style.opacity = 1; // Set opacity to 1
+        box.style.transition = 'none'; // Disable transitions for immediate effect
+    });
+
+    // After 3 seconds, reset the opacity and allow animations
+    setTimeout(() => {
+        estimatedTimeBoxes.forEach((box) => {
+            box.style.transition = ''; // Restore transitions
+            box.style.opacity = ''; // Allow animations to control opacity
+        });
+    }, 3000);
+}
+
+// Modified updatePage to include setTemporaryOpacity
 function updatePage(page, totalItems) {
     const mapping = pageMappings[page];
     if (!mapping) return;
@@ -287,13 +419,11 @@ function updatePage(page, totalItems) {
 
     // Step 2: Wait for fade-out transition to complete (1 second)
     setTimeout(() => {
-        // Clear existing content
-        for (let i = 1; i <= 7; i++) {
-            document.getElementById(`scheduled-time-${i}`).textContent = '';
-            document.getElementById(`destination-${i}`).textContent = '';
-            document.getElementById(`platform-${i}`).textContent = '';
-            document.getElementById(`estimated-time-${i}`).textContent = '';
-        }
+        // Clear and hide existing content
+        sections.forEach(section => {
+            section.style.display = 'none'; // Hide by default
+            section.querySelectorAll('div').forEach(el => (el.textContent = ''));
+        });
 
         // Fetch and update content for the current page
         fetchDepartures().then(data => {
@@ -302,41 +432,60 @@ function updatePage(page, totalItems) {
                     ? data.Items.slice(mapping.start - 1, mapping.end)
                     : data.Items.slice(0, 7);
 
-                departuresToDisplay.forEach((departure, index) => {
-                    document.getElementById(`scheduled-time-${index + 1}`).textContent = departure.ScheduledTime || '';
-                    document.getElementById(`destination-${index + 1}`).textContent = departure.Destination.Name || '';
-                    document.getElementById(`platform-${index + 1}`).textContent = departure.Platform ? `Plat ${departure.Platform}` : '';
-                    const estimatedTimeTextElement = document.getElementById(`estimated-time-${index + 1}`);
-                    if (estimatedTimeTextElement) {
-                        const estimatedTime = departure.EstimatedTime;
+                let firstEmptySectionFound = false;
 
-                        // Apply color and text based on estimated time
-                        if (estimatedTime === 'On time') {
-                            estimatedTimeTextElement.style.backgroundColor = 'white';
-                            estimatedTimeTextElement.style.color = 'black';
-                            estimatedTimeTextElement.textContent = estimatedTime;
-                        } else if (estimatedTime === 'Cancelled') {
-                            estimatedTimeTextElement.style.backgroundColor = '#ef2758';
-                            estimatedTimeTextElement.style.color = 'white';
-                            estimatedTimeTextElement.textContent = estimatedTime;
-                        } else if (estimatedTime === 'Departed') {
-                            estimatedTimeTextElement.style.backgroundColor = '#f8e714';
-                            estimatedTimeTextElement.style.color = 'black';
-                            estimatedTimeTextElement.textContent = estimatedTime;
-                        } else if (estimatedTime === 'Delayed') {
-                            estimatedTimeTextElement.style.backgroundColor = '#ec6822';
-                            estimatedTimeTextElement.style.color = 'black';
-                            estimatedTimeTextElement.textContent = estimatedTime;
-                        } else {
-                            estimatedTimeTextElement.style.backgroundColor = '#ec6822';
-                            estimatedTimeTextElement.style.color = 'black';
-                            estimatedTimeTextElement.textContent = `Exp ${estimatedTime}`;
-                        }
+                departuresToDisplay.forEach((departure, index) => {
+                    const section = sections[index];
+                    if (!section) return;
+
+                    const scheduledTimeEl = document.getElementById(`scheduled-time-${index + 1}`);
+                    const destinationEl = document.getElementById(`destination-${index + 1}`);
+                    const platformEl = document.getElementById(`platform-${index + 1}`);
+                    const estimatedTimeEl = document.getElementById(`estimated-time-${index + 1}`);
+
+                    // Populate elements with data
+                    scheduledTimeEl.textContent = departure.ScheduledTime || '';
+                    destinationEl.textContent = departure.Destination?.Name || '';
+                    platformEl.textContent = departure.Platform ? `Plat ${departure.Platform}` : '';
+
+                    const estimatedTime = departure.EstimatedTime;
+                    if (estimatedTimeEl) {
+                        // Update the estimated time box and side indicator
+                        updateEstimatedTimeBox(estimatedTime, estimatedTimeEl);
+                    }
+
+                    // Display the section if it has valid data
+                    if (departure.ScheduledTime || departure.Destination?.Name || departure.Platform || estimatedTime) {
+                        section.style.display = 'block';
+                    } else if (!firstEmptySectionFound) {
+                        // If it's the first empty section, stop displaying further sections
+                        firstEmptySectionFound = true;
+                    } else {
+                        // Hide all subsequent sections
+                        section.style.display = 'none';
                     }
                 });
             } else {
                 console.log('No departures found.');
             }
+
+            // Check each destination text box and update estimated time box if empty
+            let firstEmptyFound = false;
+            sections.forEach((section, index) => {
+                const destinationEl = document.getElementById(`destination-${index + 1}`);
+                const estimatedTimeEl = document.getElementById(`estimated-time-${index + 1}`);
+                if (destinationEl && estimatedTimeEl) {
+                    if (destinationEl.textContent.trim() === '') {
+                        estimatedTimeEl.style.backgroundColor = 'red';
+                        console.log(`Section ${index + 1} has no destination. Estimated time box set to red.`);
+                        if (!firstEmptyFound) {
+                            firstEmptyFound = true;
+                        } else {
+                            section.style.display = 'none'; // Hide all sections after the first empty one
+                        }
+                    }
+                }
+            });
 
             // Update footer and circles based on the number of items
             if (totalItems <= 7) {
@@ -360,50 +509,69 @@ function updatePage(page, totalItems) {
                 }
             }
 
+            // Step 3: Fade in visible sections with a staggered delay
+            sections.forEach((section, index) => {
+                if (section.style.display !== 'none') {
+                    setTimeout(() => {
+                        section.style.opacity = 1;
+                        section.style.transitionDelay = `${index * 0.25}s`; // 0.25s gap between sections
+                    }, 250); // Start fade-in animation after content has loaded
+                }
+            });
+
+            // Step 4: Hide estimated time boxes during fade-in
+            const estimatedTimeBoxes = document.querySelectorAll('.estimated-time-box');
+            estimatedTimeBoxes.forEach((box) => {
+                box.style.opacity = 0; // Hide the boxes (fully transparent)
+                box.style.visibility = 'hidden'; // Ensure they don't take up space
+            });
+
+            // Step 5: Show and animate estimated time boxes after the fade-in delay
+            setTimeout(() => {
+                estimatedTimeBoxes.forEach((box) => {
+                    box.style.visibility = 'visible'; // Make the boxes visible
+                    box.style.opacity = 1; // Set opacity for the slide-in animation
+                });
+                slideInEstimatedTimeBoxes(); // Trigger the slide-in animation for all estimated time boxes
+            }, 2500); // Adjust this delay to match the fade-in timing of the sections
         }).catch(error => {
             console.error('Error fetching departures:', error);
         });
-
-        // Step 3: Fade in sections with a staggered delay
-        sections.forEach((section, index) => {
-            setTimeout(() => {
-                section.style.opacity = 1;
-                section.style.transitionDelay = `${index * 0.25}s`; // 0.5s gap between sections
-            }, 500); // Start fade-in animation after content has loaded
-        });
-    }, 500); // Wait 1 second after fade-out before loading content
+    }, 1000); // Wait 1 second after fade-out before loading content
 }
 
-    // Initialize the first page and determine behavior based on item count
-    fetchDepartures().then(data => {
-        const totalItems = data.Items.length;
+// Initialize the first page and determine behavior based on item count
+fetchDepartures().then(data => {
+    const totalItems = data.Items.length;
 
-        if (totalItems <= 7) {
-            currentPage = 'page1'; // Always stay on page 1 for <= 7 items
+    if (totalItems <= 7) {
+        currentPage = 'page1'; // Always stay on page 1 for <= 7 items
+        updatePage(currentPage, totalItems);
+    } else {
+        // Automatically switch pages every 7 seconds
+        setInterval(() => {
+            currentPage = currentPage === 'page1' ? 'page2' : 'page1';
             updatePage(currentPage, totalItems);
-        } else {
-            // Automatically switch pages every 7 seconds
-            setInterval(() => {
-                currentPage = currentPage === 'page1' ? 'page2' : 'page1';
-                updatePage(currentPage, totalItems);
-            }, 7000);
+        }, 10000);
 
-            updatePage(currentPage, totalItems); // Initial update
-        }
-    });
-
-    // Update the current time every second
-    function updateTime() {
-        const timeElement = document.getElementById('time');
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+        updatePage(currentPage, totalItems); // Initial update
     }
+});
 
-    setInterval(updateTime, 1000);
-    updateTime();
+
+// Update the current time every second
+function updateTime() {
+    const timeElement = document.getElementById('time');
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(updateTime, 1000);
+updateTime();
+
 </script>
 
 
