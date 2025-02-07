@@ -8,7 +8,7 @@
         /* Font Imports */
         @font-face {
             font-family: 'P22Underground';
-            src: url('https://raw.githubusercontent.com/MichaelH12345/tod/main/P22%20Underground%20Book.ttf') format('truetype');
+            src: url('https://raw.githubusercontent.com/MichaelH12345/simple-departure-board/main/Open%20Sans%20Regular.ttf') format('truetype');
         }
         @font-face {
             font-family: 'P22UndergroundDemiBold';
@@ -51,8 +51,6 @@
             position: relative;
         }
 
-
-
         .footer-text {
             font-family: 'P22UndergroundDemiBold', sans-serif;
             font-size: 50px;
@@ -69,13 +67,12 @@
             position: relative;
         }
 
-.section {
-    height: calc(100% / 9);
-    position: relative;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
+        .section {
+            height: calc(100% / 6.4);
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
 
         .departure-text {
             position: absolute;
@@ -84,7 +81,7 @@
             transform: translateY(-50%);
             color: white;
             font-family: 'P22UndergroundDemiBold', sans-serif;
-            font-size: 85px;
+            font-size: 80px;
         }
 
         .time-box {
@@ -94,28 +91,41 @@
             transform: translateY(-50%);
             color: #f8e714;
             font-family: 'P22UndergroundHeavy', sans-serif;
-            font-size: 75px;
+            font-size: 70px;
         }
 
         /* Added scheduled text box to each section */
         .scheduled-text {
             position: absolute;
             left: 25px;
-            top: 50%;
+            top: 30%;
             transform: translateY(-50%);
             font-family: 'P22UndergroundDemiBold', sans-serif;
-            font-size: 75px;
+            font-size: 65px;
             color: #f8e714;
         }
+
+.info-text {
+    position: absolute;
+    left: 215px;
+    top: 75%;
+    transform: translateY(-50%);
+    font-family: 'P22UndergroundDemiBold', sans-serif;
+    font-size: 40px;
+    color: #f8e714;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: visible; /* Allow text to extend beyond container */
+}
+
 
         /* Added destination text box to each section */
         .destination-text {
             position: absolute;
-            left: 240px;
-            top: 50%;
+            left: 215px;
+            top: 30%;
             transform: translateY(-50%);
             font-family: 'P22UndergroundDemiBold', sans-serif;
-            font-size: 75px;
+            font-size: 70px;
             color: white;
         }
 
@@ -123,74 +133,74 @@
         .platform-text {
             position: absolute;
             right: 425px;
-            top: 50%;
+            top: 30%;
             transform: translateY(-50%);
             font-family: 'P22UndergroundDemiBold', sans-serif;
-            font-size: 75px;
+            font-size: 70px;
             color: #f8e714;
         }
 
-/* Estimated time box (hidden initially, will slide in from right) */
-.estimated-time-box {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 355px;
-    height: 80px;
-    background-color: black;
-    border-radius: 7.5px; /* Apply border-radius to top-left and bottom-left only */
-    font-family: 'P22UndergroundHeavy', sans-serif;
-    font-size: 50px;
-    color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0; /* Initially hidden */
- transition: right 3s ease-in-out; /* Apply ease-out to opacity and sliding */
-}
+        /* Estimated time box (hidden initially, will slide in from right) */
+        .estimated-time-box {
+            position: absolute;
+            right: 15px;
+            top: 30%;
+            transform: translateY(-50%);
+            width: 355px;
+            height: 70px;
+            background-color: black;
+            border-radius: 2.5px; /* Apply border-radius to top-left and bottom-left only */
+            font-family: 'P22UndergroundHeavy', sans-serif;
+            font-size: 40px;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; /* Initially hidden */
+            transition: right 3s ease-in-out; /* Apply ease-out to opacity and sliding */
+        }
 
-/* Spring animation for sliding in from right */
-@keyframes slideIn {
-    0% {
-        right: -355px; /* Start off-screen */
-    }
-    100% {
-        right: 15px; /* Final position */
-    }
-}
+        /* Spring animation for sliding in from right */
+        @keyframes slideIn {
+            0% {
+                right: -355px; /* Start off-screen */
+            }
+            100% {
+                right: 15px; /* Final position */
+            }
+        }
 
-/* Trigger class for the slide-in effect */
-.estimated-time-box.show {
-    animation: slideIn 0.25s ease-out forwards; /* Slide-in from the right */
-    opacity: 1; /* Fade-in */
-}
+        /* Trigger class for the slide-in effect */
+        .estimated-time-box.show {
+            animation: slideIn 0.25s ease-out forwards; /* Slide-in from the right */
+            opacity: 1; /* Fade-in */
+        }
 
-.footer {
-    background-color: #101010;
-    height: 85px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .footer {
+            background-color: #101010;
+            height: 85px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.circles {
-    display: flex;
-    gap: 25px; /* 10px gap between circles */
-    margin-left: auto; /* Pushes the circles to the right */
-    position: relative;
-    right: 20px; /* 20px from the right edge of the page */
-}
+        .circles {
+            display: flex;
+            gap: 25px; /* 10px gap between circles */
+            margin-left: auto; /* Pushes the circles to the right */
+            position: relative;
+            right: 20px; /* 20px from the right edge of the page */
+        }
 
-.circle {
-    width: 35px;
-    height: 35px;
-    background-color: grey;
-    border-radius: 50%;
-}
+        .circle {
+            width: 35px;
+            height: 35px;
+            background-color: grey;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -199,62 +209,59 @@
         <div class="departure-text">Departures</div>
         <div class="time-box" id="time"></div>
     </div>
-            <div class="line"></div> <!-- Static line -->
+    <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-1"></div>
         <div class="destination-text" id="destination-1"></div>
+         <div class="info-text" id="info-1"></div>
+         <div class="text-fade"></div>
         <div class="platform-text" id="platform-1"></div>
-        <div class="estimated-time-box" id="estimated-time-1"></div>
+        <div class="estimated-time-box" id="estimated-time-1">Hello</div>
     </div>
-            <div class="line"></div> <!-- Static line -->
+    <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-2"></div>
         <div class="destination-text" id="destination-2"></div>
+         <div class="info-text" id="info-2"></div>
+         <div class="text-fade"></div>
         <div class="platform-text" id="platform-2"></div>
-        <div class="estimated-time-box" id="estimated-time-2"></div>
+        <div class="estimated-time-box" id="estimated-time-2">Hello</div>
     </div>
-            <div class="line"></div> <!-- Static line -->
+    <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-3"></div>
         <div class="destination-text" id="destination-3"></div>
+         <div class="info-text" id="info-3"></div>
+         <div class="text-fade"></div>
         <div class="platform-text" id="platform-3"></div>
-        <div class="estimated-time-box" id="estimated-time-3"></div>
+        <div class="estimated-time-box" id="estimated-time-3">Hello</div>
     </div>
-            <div class="line"></div> <!-- Static line -->
+    <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-4"></div>
         <div class="destination-text" id="destination-4"></div>
+         <div class="info-text" id="info-4"></div>
+         <div class="text-fade"></div>
         <div class="platform-text" id="platform-4"></div>
-        <div class="estimated-time-box" id="estimated-time-4"></div>
+        <div class="estimated-time-box" id="estimated-time-4">Hello</div>
     </div>
-            <div class="line"></div> <!-- Static line -->
+    <div class="line"></div> <!-- Static line -->
     <div class="section">
         <div class="scheduled-text" id="scheduled-time-5"></div>
         <div class="destination-text" id="destination-5"></div>
+         <div class="info-text" id="info-5"></div>
+         <div class="text-fade"></div>
         <div class="platform-text" id="platform-5"></div>
         <div class="estimated-time-box" id="estimated-time-5"></div>
     </div>
-            <div class="line"></div> <!-- Static line -->
-    <div class="section">
-        <div class="scheduled-text" id="scheduled-time-6"></div>
-        <div class="destination-text" id="destination-6"></div>
-        <div class="platform-text" id="platform-6"></div>
-        <div class="estimated-time-box" id="estimated-time-6"></div>
+    <div class="line"></div> <!-- Static line -->
+    <div class="rectangle footer">
+        <div class="footer-text" id="footer-text">Page 1 of 2</div>
+        <div class="circles">
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
     </div>
-            <div class="line"></div> <!-- Static line -->
-    <div class="section">
-        <div class="scheduled-text" id="scheduled-time-7"></div>
-        <div class="destination-text" id="destination-7"></div>
-        <div class="platform-text" id="platform-7"></div>
-        <div class="estimated-time-box" id="estimated-time-7"></div>
-    </div>
-<div class="rectangle footer">
-    <div class="footer-text" id="footer-text">Page 1 of 2</div>
-    <div class="circles">
-        <div class="circle"></div>
-        <div class="circle"></div>
-</div>
-
 
 <script>
 const pageMappings = {
@@ -268,11 +275,16 @@ if (!stationCode) {
     stationCode = "CAR"; // Default to CAR if no input is given
 }
 
+let departuresData = []; // Array to store departures data
+let whereAreTheyNowData = {}; // Object to store where they are now data
+let stationData = {}; // Object to store the station names from JSON
+
 async function fetchDepartures() {
     try {
         const apiUrl = `https://railinfo-api.gwr.com/journey/departures/${stationCode}`;
         const response = await fetch(apiUrl);
         const data = await response.json();
+        departuresData = data.Items || [];
 
         // Update "departure-text" with the station name
         if (data.Station && data.Station.Name) {
@@ -282,25 +294,6 @@ async function fetchDepartures() {
             }
         }
 
-        // Check if there are departures (Items)
-        if (!data.Items || data.Items.length === 0) {
-            // If no items, create and display a "No services" message
-            const noServicesText = document.createElement('div');
-            noServicesText.textContent = 'Please listen for announcements or call National Rail Enquiries on 03457 48 49 50 ';
-            noServicesText.style.position = 'absolute';
-            noServicesText.style.top = '175px'; // Position 100px from the top
-            noServicesText.style.left = '50%'; // Center horizontally
-            noServicesText.style.transform = 'translateX(-50%)'; // Adjust for exact centering
-            noServicesText.style.fontSize = '70px';
-            noServicesText.style.textAlign = 'center';
-            noServicesText.style.fontFamily = "'P22UndergroundDemiBold', sans-serif"; // Apply the font
-            noServicesText.style.color = 'white'; // Set the text color to white
-            document.body.appendChild(noServicesText);
-        } else {
-            // Handle the data.Items if there are departures
-            console.log(data.Items); // For example, log the departures to the console
-        }
-
         return data;
     } catch (error) {
         console.error('Error fetching departures:', error);
@@ -308,66 +301,133 @@ async function fetchDepartures() {
     }
 }
 
+async function fetchWhereAreTheyNow() {
+    try {
+        const apiUrl = `https://nr.whoosh.media/stationsapi/wherearetheynow/${stationCode}/`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        whereAreTheyNowData = data; // Store the "where are they now" data
+
+        console.log('Where are they now data:', whereAreTheyNowData); // Log the data to debug
+
+        if (Array.isArray(whereAreTheyNowData)) {
+            await matchStationNames(); // Call function to update names if the data is an array
+        } else {
+            console.error('Data is not an array:', whereAreTheyNowData);
+        }
+    } catch (error) {
+        console.error('Error fetching "Where are they now" data:', error);
+    }
+}
+
+// Assuming stationsData is the JSON data fetched from the stations file
+let stationsData = {}; // To store station names by CRS codes
+
+async function fetchStationData() {
+    // Fetch the JSON file with station data
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/davwheat/uk-railway-stations/main/stations.json');
+        const data = await response.json();
+        stationsData = data.reduce((acc, station) => {
+            acc[station.crsCode] = station.stationName; // Map crsCode to stationName
+            return acc;
+        }, {}); // Store stations as a dictionary with crsCode as keys
+
+        console.log('Station data:', stationsData); // Log to debug
+    } catch (error) {
+        console.error('Error fetching station data:', error);
+    }
+}
+
+async function fetchWhereAreTheyNow() {
+    try {
+        const apiUrl = `https://nr.whoosh.media/stationsapi/wherearetheynow/${stationCode}/`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        whereAreTheyNowData = data; // Store the "where are they now" data
+
+        console.log('Where are they now data:', whereAreTheyNowData); // Log the data to debug
+
+        if (Array.isArray(whereAreTheyNowData)) {
+            await matchStationNames(); // Call function to update names if the data is an array
+        } else {
+            console.error('Data is not an array:', whereAreTheyNowData);
+        }
+    } catch (error) {
+        console.error('Error fetching "Where are they now" data:', error);
+    }
+}
+
+// Function to match and update all CRS codes in the data with station names
+async function matchStationNames() {
+    // Ensure whereAreTheyNowData is an array before calling .map()
+    if (Array.isArray(whereAreTheyNowData)) {
+        // Iterate through the 'where are they now' data and update CRS codes with station names
+        whereAreTheyNowData = whereAreTheyNowData.map(entry => {
+            const departureName = stationsData[entry.departureCrsCode] || entry.departureCrsCode; // Match CRS code or leave the CRS code as fallback
+            const arrivalName = stationsData[entry.arrivalCrsCode] || entry.arrivalCrsCode; // Same for arrival
+
+            return {
+                ...entry,
+                departureName: departureName, // Replace CRS code with station name
+                arrivalName: arrivalName, // Replace CRS code with station name
+            };
+        });
+
+        console.log('Updated "Where are they now" data with names:', whereAreTheyNowData);
+    } else {
+        console.error('Where are they now data is not an array:', whereAreTheyNowData);
+    }
+}
+
+// Make sure to fetch both station data and whereAreTheyNow data before matching CRS codes
+fetchStationData();
+fetchWhereAreTheyNow();
 
 
-function updateEstimatedTimeBox(estimatedTime, estimatedTimeEl) {
-    // Debug: Log the function call
-    console.log('Updating Estimated Time Box:', estimatedTime);
 
+function updateEstimatedTimeBox(estimatedTime, estimatedTimeEl, platform, destination) {
     let boxColor;
     let sideIndicatorColor;
+    let boxText;
 
-    // Apply color and text based on estimated time
-    if (estimatedTime === 'On time') {
+    // Check if Platform is 'BUS' or Destination contains '(Bus)' (case-insensitive)
+    if (platform === 'BUS' || /\(Bus\)/i.test(destination)) {
+        boxColor = 'blue'; // Blue color for bus service
+        boxText = 'Bus Service'; // Replace text with 'Bus Service'
+        estimatedTimeEl.style.color = 'white'; // White text color for visibility
+    } else if (estimatedTime === 'On time') {
         boxColor = 'white';
+        boxText = estimatedTime;
         estimatedTimeEl.style.color = 'black';
-        estimatedTimeEl.textContent = estimatedTime;
-        sideIndicatorColor = boxColor; // Same color for side indicator
     } else if (estimatedTime === 'Cancelled') {
         boxColor = '#ef2758'; // Red for "Cancelled"
+        boxText = estimatedTime;
         estimatedTimeEl.style.color = 'white';
-        estimatedTimeEl.textContent = estimatedTime;
-        sideIndicatorColor = boxColor; // Same color for side indicator
     } else if (estimatedTime === 'Departed') {
         boxColor = '#f8e714'; // Yellow for "Departed"
+        boxText = estimatedTime;
         estimatedTimeEl.style.color = 'black';
-        estimatedTimeEl.textContent = estimatedTime;
-        sideIndicatorColor = boxColor; // Same color for side indicator
     } else if (estimatedTime === 'Delayed') {
         boxColor = '#ec6822'; // Orange for "Delayed"
+        boxText = estimatedTime;
         estimatedTimeEl.style.color = 'black';
-        estimatedTimeEl.textContent = estimatedTime;
-        sideIndicatorColor = boxColor; // Same color for side indicator
     } else {
         boxColor = '#ec6822'; // Default for "Exp" (Expected)
+        boxText = `Exp ${estimatedTime}`;
         estimatedTimeEl.style.color = 'black';
-        estimatedTimeEl.textContent = `Exp ${estimatedTime}`;
-        sideIndicatorColor = boxColor; // Same color for side indicator
     }
 
     // Apply the box color to the estimated time box
     estimatedTimeEl.style.backgroundColor = boxColor;
+    estimatedTimeEl.textContent = boxText;
 
     // Apply the same color to the side indicator
     const sideIndicator = estimatedTimeEl.querySelector('.side-indicator');
     if (sideIndicator) {
-        sideIndicator.style.backgroundColor = sideIndicatorColor; // Same color for side indicator
+        sideIndicator.style.backgroundColor = boxColor;
     }
-
-    // Debug: Log applied colors
-    console.log('Box background color:', boxColor);
-    console.log('Side indicator color:', sideIndicatorColor);
-
-    // Optionally, trigger any animations if needed
-    window.addEventListener('load', () => {
-        estimatedTimeEl.classList.add('show'); // Trigger a CSS animation (if desired)
-    });
 }
-
-
-
-
-
 
 // Function to trigger the slide-in animation for all estimated time boxes
 function slideInEstimatedTimeBoxes() {
@@ -385,24 +445,7 @@ function slideInEstimatedTimeBoxes() {
     }, 00); // Delay to allow time for the fade-in of sections
 }
 
-// Function to set estimated time box opacity to 1 for 3 seconds
-function setTemporaryOpacity() {
-    const estimatedTimeBoxes = document.querySelectorAll('.estimated-time-box');
-    estimatedTimeBoxes.forEach((box) => {
-        box.style.opacity = 1; // Set opacity to 1
-        box.style.transition = 'none'; // Disable transitions for immediate effect
-    });
 
-    // After 3 seconds, reset the opacity and allow animations
-    setTimeout(() => {
-        estimatedTimeBoxes.forEach((box) => {
-            box.style.transition = ''; // Restore transitions
-            box.style.opacity = ''; // Allow animations to control opacity
-        });
-    }, 3000);
-}
-
-// Modified updatePage to include setTemporaryOpacity
 function updatePage(page, totalItems) {
     const mapping = pageMappings[page];
     if (!mapping) return;
@@ -442,17 +485,67 @@ function updatePage(page, totalItems) {
                     const destinationEl = document.getElementById(`destination-${index + 1}`);
                     const platformEl = document.getElementById(`platform-${index + 1}`);
                     const estimatedTimeEl = document.getElementById(`estimated-time-${index + 1}`);
+                    const operatorEl = section.querySelector('.info-text'); // Selecting .info-text for each section
 
                     // Populate elements with data
                     scheduledTimeEl.textContent = departure.ScheduledTime || '';
                     destinationEl.textContent = departure.Destination?.Name || '';
-                    platformEl.textContent = departure.Platform ? `Plat ${departure.Platform}` : '';
+
+                    // Check if Platform is 'BUS', and handle display accordingly
+                    if (departure.Platform) {
+                        platformEl.textContent = departure.Platform === 'BUS'
+                            ? `${departure.Platform}`
+                            : `Plat ${departure.Platform}`;
+                    } else {
+                        platformEl.textContent = ''; // Clear platform if not available
+                    }
 
                     const estimatedTime = departure.EstimatedTime;
                     if (estimatedTimeEl) {
                         // Update the estimated time box and side indicator
                         updateEstimatedTimeBox(estimatedTime, estimatedTimeEl);
                     }
+
+const serviceId = departure.Id;
+let whereAreTheyNowText = whereAreTheyNowData[serviceId] || "";
+let locationText = "";
+
+// Check if the service is cancelled
+if (departure.EstimatedTime !== 'Cancelled' && whereAreTheyNowText) {
+    // Split the text to check for multiple CRS codes
+    const crsCodes = whereAreTheyNowText.split('-').map(code => code.trim());
+
+    if (crsCodes.length === 1) {
+        // Single CRS code case: "Currently at [Station Name]."
+        const stationName = stationsData[crsCodes[0]] || crsCodes[0]; // Replace with station name if found
+        locationText = `Currently at ${stationName}.`;
+    } else if (crsCodes.length === 2) {
+        // Two CRS codes case: "Currently between [Station 1] and [Station 2]."
+        const station1 = stationsData[crsCodes[0]] || crsCodes[0];
+        const station2 = stationsData[crsCodes[1]] || crsCodes[1];
+        locationText = `Currently between ${station1} and ${station2}.`;
+    } else {
+        // Fallback if it doesn't match expected patterns
+        locationText = `(${whereAreTheyNowText}).`;
+    }
+}
+
+// Display operator and ensure location text appears first
+if (operatorEl) {
+    const operatorName = departure.Operator || "Unknown";
+
+    // Use 'A' if the operator is "Avanti West Coast", otherwise determine 'A' or 'An' automatically
+    const article = operatorName === "Avanti West Coast" ? "" : /^[AEIOU]/i.test(operatorName) ? "" : "";
+
+    operatorEl.textContent = `${locationText} ${article} ${operatorName}`;
+}
+
+
+ // ${article} ${operatorName} service.
+
+
+                    // Log the ID of the service
+                    console.log('Service ID:', departure.Id);
 
                     // Display the section if it has valid data
                     if (departure.ScheduledTime || departure.Destination?.Name || departure.Platform || estimatedTime) {
@@ -533,7 +626,7 @@ function updatePage(page, totalItems) {
                     box.style.opacity = 1; // Set opacity for the slide-in animation
                 });
                 slideInEstimatedTimeBoxes(); // Trigger the slide-in animation for all estimated time boxes
-            }, 2250); // Adjust this delay to match the fade-in timing of the sections
+            }, 1750); // Adjust this delay to match the fade-in timing of the sections
         }).catch(error => {
             console.error('Error fetching departures:', error);
         });
@@ -559,6 +652,12 @@ fetchDepartures().then(data => {
 });
 
 
+// Fetch the "Where are they now" data after departures data
+fetchWhereAreTheyNow();
+
+// Fetch the station data from JSON
+fetchStationData();
+
 // Update the current time every second
 function updateTime() {
     const timeElement = document.getElementById('time');
@@ -573,6 +672,8 @@ setInterval(updateTime, 1000);
 updateTime();
 
 </script>
+
+
 
 
 
