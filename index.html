@@ -201,6 +201,44 @@
             background-color: grey;
             border-radius: 50%;
         }
+.info-container {
+    position: absolute;
+    font-family: 'P22UndergroundDemiBold', sans-serif;
+    font-size: 50px;
+    color: white;
+    left: 310px; /* Position 20px from the left */
+    bottom: -2px; /* Position text within the footer */
+    width: calc(100vw - 450px);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.info {
+    display: inline-block;
+    white-space: nowrap;
+    will-change: transform; /* Optimizes performance */
+}
+
+/* Dynamic animation */
+@keyframes scrollText {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+
+/* Solid Mask Effect */
+.mask-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 200px; /* Blocks out last 200px of the screen */
+    background: white;
+}
     </style>
 </head>
 <body>
@@ -257,13 +295,20 @@
     <div class="line"></div> <!-- Static line -->
     <div class="rectangle footer">
         <div class="footer-text" id="footer-text">Page 1 of 2</div>
+<div class="info-container">
+    <marquee behavior="scroll" direction="left" scrollamount="22.5" class="info">
+        
+    </marquee>
+    </div>
         <div class="circles">
             <div class="circle"></div>
             <div class="circle"></div>
+            
         </div>
     </div>
 
 <script>
+
 const pageMappings = {
     page1: { start: 1, end: 7 }, // First 7 services
     page2: { start: 8, end: 14 } // Next 7 services
@@ -728,6 +773,43 @@ function updateTime() {
     const seconds = String(now.getSeconds()).padStart(2, '0');
     timeElement.textContent = `${hours}:${minutes}:${seconds}`;
 }
+
+// Function to fetch and display the message
+async function displayMessage() {
+    const url = `https://nr.whoosh.media/stationsapi/xhtmlhessage/${stationCode}`; 
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        let message = await response.text();
+
+        // Check if message starts with "This station usually"
+        if (message.startsWith('"This station usually')) {
+            document.querySelector('.info').textContent = 'If you see something that doesn\'t look right, speak to staff or text the British Transport Police on 61016. We\'ll sort it. See it. Say it. Sorted.'; // Keep box visible but empty
+            return;
+        }
+
+        // Remove all quotes
+        message = message.replace(/"/g, '');
+
+        // Remove the first 2 characters after the first quote
+        message = message.replace(/^.(.{1})/, '');
+
+        // Insert the cleaned message into the scrolling text container
+        document.querySelector('.info').textContent = message;
+    } catch (error) {
+        console.error('Error fetching message:', error);
+        document.querySelector('.info').textContent = 'Error loading message';
+    }
+}
+
+// Call the function to update the text
+displayMessage();
+
+// Optionally, refresh the message every 30 seconds
+setInterval(displayMessage, 500000);
+
 
 setInterval(updateTime, 1000);
 updateTime();
