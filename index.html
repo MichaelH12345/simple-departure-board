@@ -518,12 +518,12 @@ if (departure.EstimatedTime !== 'Cancelled' && whereAreTheyNowText) {
     if (crsCodes.length === 1) {
         // Single CRS code case: "Currently at [Station Name]."
         const stationName = stationsData[crsCodes[0]] || crsCodes[0]; // Replace with station name if found
-        locationText = `Currently at ${stationName}.`;
+        locationText = `Train at ${stationName}.`;
     } else if (crsCodes.length === 2) {
         // Two CRS codes case: "Currently between [Station 1] and [Station 2]."
         const station1 = stationsData[crsCodes[0]] || crsCodes[0];
         const station2 = stationsData[crsCodes[1]] || crsCodes[1];
-        locationText = `Currently between ${station1} and ${station2}.`;
+        locationText = `Train between ${station1} and ${station2}.`;
     } else {
         // Fallback if it doesn't match expected patterns
         locationText = `(${whereAreTheyNowText}).`;
