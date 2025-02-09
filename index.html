@@ -284,7 +284,6 @@ async function fetchDepartures() {
         const apiUrl = `https://railinfo-api.gwr.com/journey/departures/${stationCode}`;
         const response = await fetch(apiUrl);
         const data = await response.json();
-        departuresData = data.Items || [];
 
         // Update "departure-text" with the station name
         if (data.Station && data.Station.Name) {
@@ -294,12 +293,74 @@ async function fetchDepartures() {
             }
         }
 
+        // Select all sections containing departure information
+        const departureSections = document.querySelectorAll('.section');
+        const existingNoServicesText = document.querySelector('.no-services-text');
+        if (existingNoServicesText) {
+            existingNoServicesText.remove();
+        }
+
+        // Check if there are departures (Items)
+        if (!data.Items || data.Items.length === 0) {
+            // Hide all departure sections
+            departureSections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // If no items, create and display a "No services" message
+            const noServicesText = document.createElement('div');
+            noServicesText.classList.add('no-services-text');
+            noServicesText.textContent = 'No services scheduled to depart from this station in the next 2 hours.';
+            noServicesText.style.position = 'absolute';
+            noServicesText.style.top = '175px'; // Position 100px from the top
+            noServicesText.style.left = '50%'; // Center horizontally
+            noServicesText.style.transform = 'translateX(-50%)'; // Adjust for exact centering
+            noServicesText.style.fontSize = '70px';
+            noServicesText.style.textAlign = 'center';
+            noServicesText.style.fontFamily = "'P22UndergroundDemiBold', sans-serif"; // Apply the font
+            noServicesText.style.color = 'white'; // Set the text color to white
+            document.body.appendChild(noServicesText);
+        } else {
+            // Show departure sections if there are departures
+            departureSections.forEach(section => {
+                section.style.display = 'block';
+            });
+        }
+
         return data;
     } catch (error) {
         console.error('Error fetching departures:', error);
+        
+        // Hide all departure sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Remove any existing no-services text
+        const existingNoServicesText = document.querySelector('.no-services-text');
+        if (existingNoServicesText) {
+            existingNoServicesText.remove();
+        }
+
+        // Display error message
+        const errorText = document.createElement('div');
+        errorText.classList.add('no-services-text');
+        errorText.textContent = 'Error fetching live departure information. Speak with station staff or help points for further information.';
+        errorText.style.position = 'absolute';
+        errorText.style.top = '175px';
+        errorText.style.left = '50%';
+        errorText.style.transform = 'translateX(-50%)';
+        errorText.style.fontSize = '75px';
+        errorText.style.textAlign = 'center';
+        errorText.style.fontFamily = "'P22UndergroundDemiBold', sans-serif";
+        errorText.style.color = 'white';
+        errorText.style.width = '1500px';
+        document.body.appendChild(errorText);
+
         return { Items: [] }; // Return an empty list on error
     }
 }
+
 
 async function fetchWhereAreTheyNow() {
     try {
@@ -518,12 +579,12 @@ if (departure.EstimatedTime !== 'Cancelled' && whereAreTheyNowText) {
     if (crsCodes.length === 1) {
         // Single CRS code case: "Currently at [Station Name]."
         const stationName = stationsData[crsCodes[0]] || crsCodes[0]; // Replace with station name if found
-        locationText = `Train at ${stationName}.`;
+        locationText = `Currently at ${stationName}.`;
     } else if (crsCodes.length === 2) {
         // Two CRS codes case: "Currently between [Station 1] and [Station 2]."
         const station1 = stationsData[crsCodes[0]] || crsCodes[0];
         const station2 = stationsData[crsCodes[1]] || crsCodes[1];
-        locationText = `Train between ${station1} and ${station2}.`;
+        locationText = `Currently between ${station1} and ${station2}.`;
     } else {
         // Fallback if it doesn't match expected patterns
         locationText = `(${whereAreTheyNowText}).`;
@@ -561,24 +622,24 @@ if (operatorEl) {
             } else {
                 console.log('No departures found.');
             }
-
-            // Check each destination text box and update estimated time box if empty
-            let firstEmptyFound = false;
-            sections.forEach((section, index) => {
-                const destinationEl = document.getElementById(`destination-${index + 1}`);
-                const estimatedTimeEl = document.getElementById(`estimated-time-${index + 1}`);
-                if (destinationEl && estimatedTimeEl) {
-                    if (destinationEl.textContent.trim() === '') {
-                        estimatedTimeEl.style.backgroundColor = 'red';
-                        console.log(`Section ${index + 1} has no destination. Estimated time box set to red.`);
-                        if (!firstEmptyFound) {
-                            firstEmptyFound = true;
-                        } else {
-                            section.style.display = 'none'; // Hide all sections after the first empty one
-                        }
-                    }
-                }
-            });
+// Check each destination text box and update estimated time box if empty
+let firstEmptyFound = false;
+sections.forEach((section, index) => {
+    const destinationEl = document.getElementById(`destination-${index + 1}`);
+    const estimatedTimeEl = document.getElementById(`estimated-time-${index + 1}`);
+    if (destinationEl && estimatedTimeEl) {
+        if (destinationEl.textContent.trim() === '') {
+            estimatedTimeEl.style.backgroundColor = 'red';
+            console.log(`Section ${index + 1} has no destination. Estimated time box set to red.`);
+            if (!firstEmptyFound) {
+                firstEmptyFound = true;
+                section.style.display = 'none'; // Hide the first empty section
+            } else {
+                section.style.display = 'none'; // Hide all sections after the first empty one
+            }
+        }
+    }
+});
 
             // Update footer and circles based on the number of items
             if (totalItems <= 7) {
